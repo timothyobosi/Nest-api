@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
 
 //handle users route
 @Controller('users')
@@ -11,8 +11,8 @@ export class UsersController {
     DELETE /users/:id 
     */
 
-  @Get() //GET /users
-  findAll() {
+  @Get() //GET /users or /users?role=value/
+  findAll(@Query('role') role?: 'INTERN'|'ENGINEER'|'ADMIN') {
     return []
   }
 
