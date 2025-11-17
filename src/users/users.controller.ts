@@ -12,6 +12,9 @@ import {
 
 import { UsersService } from './users.service'
 
+import { UpdateUserDto } from './dto/update -user.dto'
+import { CreateUserDto } from './dto/create-user.dto'
+
 //handle users route
 @Controller('users')
 export class UsersController {
@@ -49,29 +52,33 @@ export class UsersController {
     // we need to convert it to a number by adding a + infont of id(urinary plus operator)
   }
 
+  // @Post() //Post /users
+  // create(
+  //   @Body()
+  //   user: {
+  //     name: string
+  //     email: string
+  //     role: 'INTERN' | 'ENGINEER' | 'ADMIN'
+  //   }
+  // ) {
+  //   return this.userService.create(user)
+  // }
+
   @Post() //Post /users
   create(
     @Body()
-    user: {
-      name: string
-      email: string
-      role: 'INTERN' | 'ENGINEER' | 'ADMIN'
-    }
+    createUserDto: CreateUserDto
   ) {
-    return this.userService.create(user)
+    return this.userService.create(createUserDto)
   }
 
   @Patch(':id') //PATCH /users/:id
   update(
     @Param('id', ParseIntPipe) id: number, //get the id from the param and convert to number
     @Body()
-    userUpdate: {
-      name: string
-      email: string // we cant update id but we can update other 3 properties
-      role?: 'INTERN' | 'ENGINEER' | 'ADMIN'
-    }
+    updateUserDto: UpdateUserDto //get the body from the request
   ) {
-    return this.userService.update(id, userUpdate)
+    return this.userService.update(id, updateUserDto)
   }
 
   @Delete(':id') //DELETE /users/:id
