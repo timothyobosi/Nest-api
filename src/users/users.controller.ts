@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
 import {
   Body,
   Controller,
@@ -7,7 +6,8 @@ import {
   Param,
   Patch,
   Post,
-  Query
+  Query,
+  ParseIntPipe
 } from '@nestjs/common'
 
 import { UsersService } from './users.service'
@@ -40,9 +40,12 @@ export class UsersController {
   // }
 
   @Get(':id') //GET /users/:id
-  findOne(@Param('id') id: string) {
-    //we are recieving id as a string(thats how it will be sent because it is a param) all params are strings
-    return this.userService.findOne(+id)
+  // findOne(@Param('id') id: string) {
+  //we are recieving id as a string(thats how it will be sent because it is a param) all params are strings
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    //ParseIntPipe will convert the string to a number
+    return this.userService.findOne(id)
+    // return this.userService.findOne(+id)
     // we need to convert it to a number by adding a + infont of id(urinary plus operator)
   }
 
@@ -60,18 +63,19 @@ export class UsersController {
 
   @Patch(':id') //PATCH /users/:id
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number, //get the id from the param and convert to number
     @Body()
     userUpdate: {
       name: string
       email: string // we cant update id but we can update other 3 properties
       role?: 'INTERN' | 'ENGINEER' | 'ADMIN'
-    }) {
-    return this.userService.update(+id, userUpdate)
+    }
+  ) {
+    return this.userService.update(id, userUpdate)
   }
 
   @Delete(':id') //DELETE /users/:id
-  delete(@Param('id') id: string) {
-    return this.userService.delete(+id)
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.delete(id)
   }
 }
